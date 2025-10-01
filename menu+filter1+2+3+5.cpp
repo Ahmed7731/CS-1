@@ -22,8 +22,9 @@ int main() {
         cout << "4. Apply Invert Colors Filter\n";
         cout << "5. Flip the image\n";
         cout << "6. Apply Rotate Image Filter\n";
-        cout << "7. Save the image\n";
-        cout << "8. Exit\n";
+        cout << "7. Apply Resize Image\n";
+        cout << "8. Save the image\n";
+        cout << "9. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -183,7 +184,69 @@ int main() {
             cout<< " Rotate Image applied.\n";
             break;
     }
-        case 7: {
+            case 7:{
+                    int choice;
+    cout << "Choose resize method:\n";
+    cout << "1. Enter Dimensions\n";
+    cout << "2. Enter Ratio\n";
+    cin >> choice;
+    int new_width=0, new_height=0;
+    int old_width = img.width;
+    int old_height = img.height;
+
+    if (choice == 1) {
+        cout << "Enter Dimensions:\n";
+        cin >> new_width >> new_height;
+        cout << "Image resized to: " << new_width << "x" << new_height << ".";
+    }
+    else if (choice == 2) {
+        int ratio_width, ratio_height;
+        cout << "Enter Ratio:\n";
+        cin >> ratio_width >> ratio_height;
+
+        cout << "1. Keep Width\n";
+        cout << "2. Keep Height\n";
+        int preserve;
+        cin >> preserve;
+
+        if (preserve == 1) {
+            new_width = old_width;
+            new_height = (old_width * ratio_height) / ratio_width;
+        }
+        else if (preserve==2) {
+            new_height = old_height;
+            new_width = (old_height * ratio_width) / ratio_height;
+        }
+        else {
+            cout << "ERROR.";
+            break;
+        }
+        cout << "Image resized to: " << new_width << "x" << new_height
+            << " (aspect ratio " << ratio_width << ":" << ratio_height << ").\n";
+    }
+    else {
+        cout << "Invalid resize option.\n";
+        break;
+    }
+
+    Image image1(new_width, new_height);
+    float X = (float)old_width / new_width;
+    float Y = (float)old_height / new_height;
+
+    for (int i = 0; i < new_width; i++) {
+        for (int j = 0; j < new_height; j++) {
+            float W =  i * X ;
+            float H =  j * Y ;
+            for (int k = 0; k < 3; k++) {
+                image1(i, j, k) = img((int)round(W), (int)round(H), k);
+            }
+        }
+    }
+    img = image1;
+                cout<<"Resize Image applied\n";
+                break;
+            }
+        case 8: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -194,7 +257,7 @@ int main() {
             }
             break;
         }
-        case 8: {
+        case 9: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
