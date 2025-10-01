@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "Image_Class.h"
 using namespace std;
 
