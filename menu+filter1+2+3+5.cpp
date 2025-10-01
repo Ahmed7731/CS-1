@@ -21,8 +21,9 @@ int main() {
         cout << "3. Apply Black and White Filter\n";
         cout << "4. Apply Invert Colors Filter\n";
         cout << "5. Flip the image\n";
-        cout << "6. Save the image\n";
-        cout << "7. Exit\n";
+        cout << "6. Apply Rotate Image Filter\n";
+        cout << "7. Save the image\n";
+        cout << "8. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -142,7 +143,47 @@ int main() {
             }
             break;
         }
-        case 6: {
+        case 6:{
+                 int angle;
+                cout<<"Enter an angle"<<endl;
+                cin>>angle;
+    if (angle==90) {
+        Image newImage(img.height,img.width);
+        for (int i = 0; i < img.height; i++) {
+            for (int j = 0; j < img.width; j++) {
+                for (int k = 0; k < 3; k++) {
+                    newImage(i,j,k) = img(j,img.height-1-i,k);
+                }
+            }
+        }
+        img = newImage;
+    }
+    else if (angle==180) {
+        Image newImage(img.width,img.height);
+        for (int i = 0; i < img.width; i++) {
+            for (int j = 0; j < img.height; j++) {
+                for (int k = 0; k < 3; k++) {
+                    newImage(i,j,k) = img(img.width-1-i,img.height-1-j,k);
+                }
+            }
+        }
+        img = newImage;
+    }
+    else if (angle == 270) {
+        Image newImage(img.height,img.width);
+        for (int i = 0; i < img.height; i++) {
+            for (int j = 0; j < img.width; j++) {
+                for (int k = 0; k < 3; k++) {
+                    newImage(i,j,k) = img(img.width-1-j,i,k);
+                }
+            }
+        }
+        img = newImage;
+     }   
+            cout<< " Rotate Image applied.\n";
+            break;
+    }
+        case 7: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -153,7 +194,7 @@ int main() {
             }
             break;
         }
-        case 7: {
+        case 8: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
