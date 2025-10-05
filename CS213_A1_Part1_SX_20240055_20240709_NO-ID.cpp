@@ -8,7 +8,7 @@ Yousef Mohamed Abdelhameed (20240709)
 Ahmed Mansour Khalaf (20240055): Menu+Filter5
 Mohamed Mahmoud Ahmed (Doesn't have ID yet): Filter6+11
 Yousef Mohamed Abdelhameed (20240709): Filter1+2+3
--SECTION: Registration hasn’t opened yet, but we will register for sections S5–S6. INSHALLAH
+-SECTION: Registration hasnâ€™t opened yet, but we will register for sections S5â€“S6. INSHALLAH
 */
 #include <iostream>
 #include "Image_Class.h"
@@ -35,8 +35,10 @@ int main() {
         cout << "5. Flip the image\n";
         cout << "6. Rotate the image\n";
         cout << "7. Resize the image\n";
-        cout << "8. Save the image\n";
-        cout << "9. Exit\n";
+        cout << "8. Darken the image by 50%\n";
+        cout << "9. Lighten the image by 50%\n";
+        cout << "10. Save the image\n";
+        cout << "11. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -256,6 +258,33 @@ int main() {
             break;
         }
         case 8: {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < img.channels; ++k) {
+                int value = img(i, j, k);
+                value = value * 0.5;
+                img(i, j, k) = value;
+            }
+        }
+    }
+    cout << "Image is darkened by 50%.\n";
+    break;
+}
+        case 9: {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < img.channels; ++k) {
+                int value = img(i, j, k);
+                value = value * 1.5;
+                value = min(255, value);
+                img(i, j, k) = value;
+            }
+        }
+    }
+    cout << "Image is lightened by 50%.\n";
+    break;
+}
+        case 10: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -266,7 +295,7 @@ int main() {
             }
             break;
         }
-        case 9: {
+        case 11: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
