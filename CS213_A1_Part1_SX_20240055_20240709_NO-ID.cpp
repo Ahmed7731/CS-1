@@ -37,8 +37,9 @@ int main() {
         cout << "7. Resize the image\n";
         cout << "8. Darken the image by 50%\n";
         cout << "9. Lighten the image by 50%\n";
-        cout << "10. Save the image\n";
-        cout << "11. Exit\n";
+        cout << "10. Crop the image\n";
+        cout << "11. Save the image\n";
+        cout << "12. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -285,6 +286,33 @@ int main() {
     break;
 }
         case 10: {
+    int x, y, newW, newH;
+    cout << "Enter starting point (x,y):\n";
+    cin >> x >> y;
+    cout << "Enter the new dimensions to crop (W , H):\n";
+    cin >> newW >> newH;
+
+    if (x < 0 || y < 0 || newW <= 0 || newH <= 0 ||
+        x + newW > img.width || y + newH > img.height) {
+        cout << "Invalid crop area.\n";
+        break;
+    }
+    Image cropped(newW, newH);
+
+    for (int i = 0; i < newW; i++) {
+        for (int j = 0; j < newH; j++) {
+            for (int k = 0; k < img.channels; k++) {
+                cropped(i, j, k) = img(i + x, j + y, k);
+            }
+        }
+    }
+
+    img = cropped;
+    cout << "Image cropped to " << newW << "x" << newH << " from point (" << x << " , " << y << ").\n";
+    
+    break;
+}
+        case 11: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -295,7 +323,7 @@ int main() {
             }
             break;
         }
-        case 11: {
+        case 12: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
