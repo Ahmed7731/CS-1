@@ -38,8 +38,9 @@ int main() {
         cout << "8. Darken the image by 50%\n";
         cout << "9. Lighten the image by 50%\n";
         cout << "10. Crop the image\n";
-        cout << "11. Save the image\n";
-        cout << "12. Exit\n";
+        cout << "11. Adding frame to the image\n";
+        cout << "12. Save the image\n";
+        cout << "13. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -313,6 +314,58 @@ int main() {
     break;
 }
         case 11: {
+    int thickness;
+    cout << "Enter frame thickness: ";
+    cin >> thickness;
+
+    if (thickness <= 0) {
+        cout << "Invalid thickness.\n";
+        break;
+    }
+    int r = 255, g = 255, b = 255;
+    cout << "Choose the colour of the frame:\n";
+    cout << "1. White\n";
+    cout << "2. Black\n";
+    cout << "3. Red\n";
+    cout << "4. Green\n";
+    cout << "5. Blue\n";
+    cout << "Enter your choice: ";
+    int Choice;
+    cin >> Choice;
+
+    switch (Choice) {
+    case 1: 
+        r = g = b = 255;
+        break;
+    case 2: 
+        r = g = b = 0;
+        break;
+    case 3: 
+        r = 255; g = 0; b = 0;
+        break;
+    case 4: 
+        r = 0; g = 255; b = 0;
+        break;
+    case 5: 
+        r = 0; g = 0; b = 255;
+        break;
+    default:
+        cout << "Invalid color choice.\n";
+        break;
+    }
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            if (i < thickness || i >= img.width - thickness || j < thickness || j >= img.height - thickness) {
+                img(i, j, 0) = r;
+                img(i, j, 1) = g;
+                img(i, j, 2) = b;
+            }
+        }
+    }
+    cout << "Frame added.\n";
+    break;
+}
+        case 12: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -323,7 +376,7 @@ int main() {
             }
             break;
         }
-        case 12: {
+        case 13: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
