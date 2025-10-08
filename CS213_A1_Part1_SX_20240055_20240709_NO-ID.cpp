@@ -13,7 +13,23 @@ Yousef Mohamed Abdelhameed (20240709): Filter1+2+3
 #include <iostream>
 #include "Image_Class.h"
 using namespace std;
-
+void Resize(Image & img , int new_width, int new_height) {
+    int old_width = img.width;
+    int old_height = img.height;
+    Image image1(new_width, new_height);
+    float X = (float)old_width / new_width;
+    float Y = (float)old_height / new_height;
+    for (int i = 0; i < new_width; i++) {
+        for (int j = 0; j < new_height; j++) {
+            float W =  i * X ;
+            float H =  j * Y ;
+            for (int k = 0; k < 3; k++) {
+                image1(i, j, k) = img((int)round(W), (int)round(H), k);
+            }
+        }
+    }
+    img = image1;
+}
 int main() {
     Image img;
     string fname;
@@ -40,8 +56,9 @@ int main() {
         cout << "10. Crop the image\n";
         cout << "11. Adding frame to the image\n";
         cout << "12. Blur the image\n";
-        cout << "13. Save the image\n";
-        cout << "14. Exit\n";
+        cout << "13. Merge Two images\n";
+        cout << "14. Save the image\n";
+        cout << "15. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -408,7 +425,67 @@ int main() {
     img = New;
                 break;
             }
-        case 13: {
+            case 13:{
+                    string image_name;
+    Image img_1;
+    cout<<"Load second image\n";
+    cout << "Enter new image name: ";
+    cin >> image_name;
+    if (img_1.loadNewImage(image_name)) {
+        cout << "New image loaded.\n";
+    }
+    else {
+        cout << "Failed to load new image.\n";
+        break;
+    }
+    int choice;
+    cout<<"Choose method:"<<endl;
+    cout<<"1. resize and merge"<<endl;
+    cout<<"2. merge overlap"<<endl;
+    cin>>choice;
+    int New_width , New_height ;
+    if(choice == 1) {
+        int tutorial ;
+        cout<<"Enter choice :"<<endl;
+        cout<<"1. Resize The smaller image"<<endl;
+        cout<<"2. Resize both images To the biggest W & H"<<endl;
+        cin>>tutorial;
+        if(tutorial == 1) {
+            int photo_one = img.height * img.width;
+            int photo_two = img_1.height * img_1.width;
+            if(photo_one > photo_two) {
+                Resize(img_1,img.width,img.height);
+            }
+            else if (photo_one < photo_two) {
+                Resize(img,img_1.width,img_1.height);
+            }
+            New_width = img.width , New_height = img.height;
+        }
+        else if (tutorial == 2) {
+            int Biggest_width = max(img.width, img_1.width);
+            int Biggest_height = max(img.height, img_1.height);
+            Resize(img,Biggest_width,Biggest_height);
+            Resize(img_1,Biggest_width,Biggest_height);
+            New_width = Biggest_width , New_height = Biggest_height;
+        }
+    }
+    else if(choice == 2) {
+        int smaller_width = min(img.width, img_1.width);
+        int smaller_height = min(img.height, img_1.height);
+        New_width = smaller_width , New_height = smaller_height;
+    }
+    Image answer(New_width, New_height);
+    for (int i = 0; i < New_width; i++) {
+        for (int j = 0; j < New_height; j++) {
+            for (int k = 0; k < 3; k++) {
+                answer(i, j, k) = (img(i, j, k) + img_1(i, j, k)) / 2 ;
+            }
+        }
+    }
+    img = answer;
+                break;
+            }
+        case 14: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -419,7 +496,7 @@ int main() {
             }
             break;
         }
-        case 14: {
+        case 15: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
