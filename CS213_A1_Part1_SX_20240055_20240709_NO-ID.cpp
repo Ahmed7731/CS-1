@@ -39,8 +39,9 @@ int main() {
         cout << "9. Lighten the image by 50%\n";
         cout << "10. Crop the image\n";
         cout << "11. Adding frame to the image\n";
-        cout << "12. Save the image\n";
-        cout << "13. Exit\n";
+        cout << "12. Blur the image\n";
+        cout << "13. Save the image\n";
+        cout << "14. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -365,7 +366,49 @@ int main() {
     cout << "Frame added.\n";
     break;
 }
-        case 12: {
+            case 12 :{
+                Image New(img.width, img.height);
+    vector<vector<vector<long long>>> prefix(img.width + 1,vector<vector<long long>>(img.height + 1, vector<long long>(3, 0)));
+    for (int i = 1; i <= img.width; i++) { // 2d-prefix , rows
+        for (int j = 1; j <= img.height; j++) {
+            for (int c = 0; c < 3; c++) {
+                prefix[i][j][c] = img(i - 1, j - 1, c) + prefix[i][j-1][c];
+            }
+        }
+    }
+    for (int j = 1; j <= img.height; j++) { // columns
+        for (int i = 1; i <= img.width; i++) {
+            for (int c = 0; c < 3; c++) {
+                prefix[i][j][c] += prefix[i - 1][j][c];
+            }
+        }
+    }
+    int radius = 25 ;
+    // Kernel Convolution  51 * 51
+    // box blur
+    int w1,w2,h1,h2;
+    for (int x = 0; x < img.width; x++) {
+        for (int y = 0; y < img.height; y++) {
+            if (x-radius < 0) w1 = 0;
+            else w1 = x-radius;
+            if (y-radius < 0) h1 = 0;
+            else h1 = y-radius;
+            if (x+radius >= img.width) w2 = img.width -  1;
+            else w2 = x + radius;
+            if (y+radius >= img.height) h2 = img.height - 1;
+            else h2 = y + radius;
+            w1++; h1++; w2++; h2++; // perfix 1-based
+            int area = (w2 - w1 + 1) * (h2 - h1 + 1);
+            for (int c = 0; c < 3; c++) {
+                long long sum = prefix[w2][h2][c] - (prefix[w1 - 1][h2][c]-prefix[w1-1][h1-1][c]) - prefix[w2][h1 - 1][c];
+                New(x, y, c) = sum / area;
+            }
+        }
+    }
+    img = New;
+                break;
+            }
+        case 13: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -376,7 +419,7 @@ int main() {
             }
             break;
         }
-        case 13: {
+        case 14: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
