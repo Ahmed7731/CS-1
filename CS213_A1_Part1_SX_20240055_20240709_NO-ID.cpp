@@ -59,8 +59,9 @@ int main() {
         cout << "11. Adding frame to the image\n";
         cout << "12. Blur the image\n";
         cout << "13. Merge Two images\n";
-        cout << "14. Save the image\n";
-        cout << "15. Exit\n";
+        cout << "16. Apply sunlight filter\n";
+        cout << "17. Save the image\n";
+        cout << "18. Exit\n";
         cout << "Choose option: ";
 
         int choice;
@@ -427,7 +428,7 @@ int main() {
     img = New;
                 break;
             }
-            case 13:{
+        case 13:{
                     string image_name;
     Image img_1;
     cout<<"Load second image\n";
@@ -487,7 +488,18 @@ int main() {
     img = answer;
                 break;
             }
-        case 14: {
+        case 16:{
+                for (int y = 0; y < img.height; y++) {
+    for (int x = 0; x < img.width; x++) {
+        img(x, y, 0) = min(255, img(x, y, 0) + 40);
+        img(x, y, 1) = min(255, img(x, y, 1) + 40);
+        img(x, y, 2) = max(0, img(x, y, 2) - 20);
+    }
+}
+cout << "Sunlight filter applied.\n";
+break;
+            }
+        case 17: {
             cout << "Enter filename to save (with extension .jpeg/ .jpg/ .png/ .bmp): ";
             cin >> fname;
             if (img.saveImage(fname)) {
@@ -498,7 +510,7 @@ int main() {
             }
             break;
         }
-        case 15: {
+        case 18: {
             string ans;
             cout << "Save current image before exit? (yes/no): ";
             cin >> ans;
