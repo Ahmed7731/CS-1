@@ -59,6 +59,8 @@ int main() {
         cout << "11. Adding frame to the image\n";
         cout << "12. Blur the image\n";
         cout << "13. Merge Two images\n";
+        cout << "14. detect images edges\n";
+        cout << "15. Purple images\n";
         cout << "16. Apply sunlight filter\n";
         cout << "17. Save the image\n";
         cout << "18. Exit\n";
@@ -488,6 +490,65 @@ int main() {
     img = answer;
                 break;
             }
+case 14: {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            unsigned int avg = 0;
+            for (int c = 0; c < 3; ++c) {
+                avg += img(i, j, c);
+            }
+            avg /= 3;
+            for (int c = 0; c < 3; ++c) {
+                img(i, j, c) = avg;
+            }
+        }
+    }
+    Image edge(img.width, img.height);
+    for (int x = 1; x < img.width - 1; ++x) {
+        for (int y = 1; y < img.height - 1; ++y) {
+
+            int gx = 0, gy = 0;
+
+            gx = -img(x - 1, y - 1, 0) + img(x + 1, y - 1, 0)
+                - 2 * img(x - 1, y, 0) + 2 * img(x + 1, y, 0)
+                - img(x - 1, y + 1, 0) + img(x + 1, y + 1, 0);
+
+            gy = -img(x - 1, y - 1, 0) - 2 * img(x, y - 1, 0) - img(x + 1, y - 1, 0)
+                + img(x - 1, y + 1, 0) + 2 * img(x, y + 1, 0) + img(x + 1, y + 1, 0);
+
+
+            int magnitude = sqrt(gx * gx + gy * gy);
+
+            magnitude = min(255, magnitude);
+            magnitude = 255 - magnitude;
+            for (int c = 0; c < 3; ++c) {
+                edge(x, y, c) = magnitude;
+            }
+        }
+    }
+    img = edge;
+    cout << "Image edges detected.";
+    break;
+}
+case 15: {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k < img.channels; ++k) {
+                int r = img(i, j, 0);
+                int g = img(i, j, 1);
+                int b = img(i, j, 2);
+                r = min(255, int(r * 1.01));
+                b = min(255, int(b * 1.08));
+                g = max(0, int(g * 0.9));
+                img(i, j, 0) = r;
+                img(i, j, 1) = g;
+                img(i, j, 2) = b;
+            }
+        }
+    }
+    cout << "Purple filter applied.";
+    break;
+}
         case 16:{
                 for (int y = 0; y < img.height; y++) {
     for (int x = 0; x < img.width; x++) {
