@@ -13,6 +13,7 @@ Yousef Mohamed Abdelhameed (20240709): Filter1+2+3
 #include <iostream>
 #include "Image_Class.h"
 #include <vector>
+#include <cmath>
 using namespace std;
 void Resize(Image & img , int new_width, int new_height) {
     int old_width = img.width;
