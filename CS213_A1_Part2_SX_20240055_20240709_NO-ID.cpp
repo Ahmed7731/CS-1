@@ -12,6 +12,8 @@ Yousef Mohamed Abdelhameed (20240709): Filter1+2+3+7+10
 -BONUS FILTERS:
 Ahmed Mansour Khalaf (20240055): Filter 13
 Yousef Mohamed Abdelhameed (20240709): Filter 16
+-Shared doc: https://docs.google.com/document/d/1uvxse6stpkpei_wYETE1MZdnvvAEyDyBX86jwP0Ypcg/edit?usp=sharing
+-Explaining video on drive: https://drive.google.com/file/d/1gsGo035YuTu7qQzVJsfNAHneLIWwtf5k/view?usp=drive_link
 */
 #include <iostream>
 #include <cmath>
